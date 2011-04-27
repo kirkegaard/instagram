@@ -22,23 +22,70 @@
  */
 
 require_once 'Zend/Http/Client.php';
+require_once 'Zend/Json.php';
 
 class ZendX_Service_Instagram {
 
-
+    /**
+     * API URL
+     *
+     * @var string $_api The API URL to use
+     */
     private $_api;
 
+    /**
+     * The oauth response from the api
+     *
+     * @var array $_oauth The response from the api
+     */
     private $_oauth = null;
 
+    /**
+     * API Client id
+     *
+     * @var string $_client The client id
+     * @see http://instagr.am/developer/manage/
+     */
     private $_client;
 
+    /**
+     * API Client secret
+     *
+     * @var string $_secret The client secret
+     * @see http://instagr.am/developer/manage/
+     */
     private $_secret;
 
+    /**
+     * The url we want the user redirected to after a success authentication
+     *
+     * @var string $_redirect The redirect url
+     */
     private $_redirect;
 
+    /**
+     * The access token we need to make requests
+     *
+     * @var string $_token The access token
+     */
+    private $_token;
+
+    /**
+     * The API version
+     *
+     * @var string $_version The API version
+     */
     private $_version;
 
-
+    /**
+     * Constructor
+     *
+     * @param string $client   The OAuth client id
+     * @param string $secret   The OAuth client secret
+     * @param string $redirect The redirect url
+     * @param string $api      The API url (optional)
+     * @param string $version  The API version (optional)
+     */
     public function __construct($client, $secret, $redirect, $api = 'https://api.instagram.com', $version = 'v1')
     {
         $this->_oauth    = null;
@@ -49,6 +96,11 @@ class ZendX_Service_Instagram {
         $this->_version  = $version;
     }
 
+    /**
+     * Get the authorize uri for the user
+     *
+     * @return string
+     */
     public function getAuthorizeUri()
     {
         $params = array(
@@ -56,12 +108,17 @@ class ZendX_Service_Instagram {
             'redirect_uri'  => $this->_redirect,
             'response_type' => 'code'
         );
-
         $args = http_build_query($params);
 
         return $this->_api . '/oauth/authorize/?' . $args;
     }
 
+    /**
+     * Get an access token from the API
+     *
+     * @param  string $code The code returned from auth
+     * @return string
+     */
     public function getAccessToken($code)
     {
         $params = array(
@@ -72,12 +129,17 @@ class ZendX_Service_Instagram {
             'code'          => $code
         );
 
-        return $this->_sendRequest(
+        $response = Zend_Json::decode($this->_sendRequest(
             '/oauth/access_token',
             $params,
             'POST',
             false
-        );
+        ));
+
+        $this->_oauth = $response['user'];
+        $this->_token = $response['access_token'];
+
+        return $this->_token;
     }
 
 
@@ -111,6 +173,18 @@ class ZendX_Service_Instagram {
         );
     }
 
+    /**
+     * Send a request to the API
+     *
+     * @todo Add error handling
+     *
+     * @param string  $endpoint    API endpoint
+     * @param array   $args        Request arguments
+     * @param string  $method      Request method
+     * @param boolean $use_version Do a api request with version (optional)
+     *
+     * @return object Instance Of {@link Zend_Http_Response}
+     */
     private function _sendRequest($endpoint, $args = array(), $method = 'GET', $use_version = true) 
     {
         $version = ($use_version) ? '/' . $this->_version : null;
@@ -126,7 +200,7 @@ class ZendX_Service_Instagram {
             $client->setParameterPost($args);
         }
 
-        return $client->request($method);
+        return $client->request($method)->getBody();
     }
 
 

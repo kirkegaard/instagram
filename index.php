@@ -15,7 +15,7 @@ if(isset($_GET['reset'])) {
     $_SESSION['InstagramAccessToken'] = null;
 }
 
-if(isset($_GET['code'])) {
+if(!isset($_SESSION['InstagramAccessToken']) && isset($_GET['code'])) {
     $_SESSION['InstagramAccessToken'] = $instagram->getAccessToken($_GET['code']);
 }
 
@@ -26,5 +26,3 @@ if(!isset($_SESSION['InstagramAccessToken']) || empty($_SESSION['InstagramAccess
 
 
 print 'We are all set!';
-var_dump($_SESSION);
-var_dump(json_decode($_SESSION['InstagramAccessToken']->getBody()));
