@@ -1,0 +1,10 @@
+# Instagram Zend Framework Component
+
+A quick and dirty component for instagram that fits right into Zend Framework.
+Check `index.php` for usage example
+
+## Depends
+
+ * `Zend_Json`
+ * `Zend_Http_Client`
+
