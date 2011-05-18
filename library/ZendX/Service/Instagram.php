@@ -162,25 +162,53 @@ class ZendX_Service_Instagram {
         );
     }
 
-    public function getUserFeed()
+    public function getUserSearch($query)
+    {
+        return $this->_sendRequest(
+            '/users/search/',
+            array('q' => $query)
+        );
+    }
+
+    public function getUserFollows($id = 'self')
+    {
+        return $this->_sendRequest(
+            '/users/' . $id . '/follows'
+        );
+    }
+
+    public function getUserFollowedBy($id = 'self')
+    {
+        return $this->_sendRequest(
+            '/users/' . $id . '/followed-by'
+        );
+    }
+
+    public function getUserRequestedBy()
+    {
+        return $this->_sendRequest(
+            '/users/self/requested-by'
+        );
+    }
+
+    public function getUserMediaFeed()
     {
         return $this->_sendRequest(
             '/users/self/feed'
         );
     }
 
-    public function getUserMedia($id)
+    public function getUserRecentMedia($id = 'self')
     {
         return $this->_sendRequest(
             '/users/' . $id . '/media/recent'
         );
     }
 
-    public function getUserSearch($query)
+    public function getUserRelationship($id)
     {
         return $this->_sendRequest(
-            '/users/search/',
-            array('q' => $query)
+            '/users/' . $id . '/relationship'
         );
     }
 

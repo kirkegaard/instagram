@@ -35,13 +35,28 @@ if($do == 'logout') {
 if($do == 'user') {
     $output = $instagram->getUser();
 }
-if($do == 'user_search') {}
-if($do == 'user_follows') {}
-if($do == 'user_followed_by') {}
-if($do == 'user_requested_by') {}
-if($do == 'user_media_feed') {}
-if($do == 'user_recent_media') {}
-if($do == 'user_relationship') {}
+if($do == 'user_search') {
+    $output = $instagram->getUserSearch('eyen');
+}
+if($do == 'user_follows') {
+    $output = $instagram->getUserFollows();
+}
+if($do == 'user_followed_by') {
+    $output = $instagram->getUserFollowedBy();
+}
+if($do == 'user_requested_by') {
+    $output = $instagram->getUserRequestedBy();
+}
+if($do == 'user_media_feed') {
+    $output = $instagram->getUserMediaFeed();
+}
+if($do == 'user_recent_media') {
+    $output = $instagram->getUserRecentMedia();
+}
+if($do == 'user_relationship') {
+    $output = $instagram->getUserRelationship(2743472);
+}
+
 
 
 ?><!DOCTYPE HTML>
@@ -112,6 +127,7 @@ if($do == 'user_relationship') {}
         </div>
 
         <div id="right" class="grid_9">
+            <?php var_dump($output); ?>
             <?php var_dump(Zend_Json::decode($output)); ?>
         </div>
     </div>
