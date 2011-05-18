@@ -12,15 +12,15 @@ $instagram = new ZendX_Service_Instagram(
 
 
 $do = (isset($_GET['do'])) ? $_GET['do'] : 'none';
-$output = 'Nothing to do';
+$output = array('message' => 'Nothing to do');
 
 
-if(!isset($_SESSION['InstagramAccessToken']) && isset($_GET['code'])) {
-    $_SESSION['InstagramAccessToken'] = $instagram->getAccessToken($_GET['code']);
-    $output = 'Authenticated';
-}
 if(isset($_SESSION['InstagramAccessToken'])) {
     $instagram->setAccessToken($_SESSION['InstagramAccessToken']);
+}
+if(!isset($_SESSION['InstagramAccessToken']) && isset($_GET['code'])) {
+    $_SESSION['InstagramAccessToken'] = $instagram->getAccessToken($_GET['code']);
+    $output = array('message' => 'Authenticated');
 }
 
 
@@ -30,7 +30,7 @@ if($do == 'login') {
 }
 if($do == 'logout') {
     $_SESSION['InstagramAccessToken'] = null;
-    $output = 'Logged out';
+    $output = array('message' => 'Logged out');
 }
 if($do == 'user') {
     $output = $instagram->getUser();
@@ -128,7 +128,9 @@ if($do == 'user_relationship') {
 
         <div id="right" class="grid_9">
             <?php var_dump($output); ?>
-            <?php var_dump(Zend_Json::decode($output)); ?>
+            <?php if(!is_array($output)) : ?>
+                <?php var_dump(Zend_Json::decode($output)); ?>
+            <?php endif; ?>
         </div>
     </div>
 

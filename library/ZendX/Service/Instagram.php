@@ -230,9 +230,12 @@ class ZendX_Service_Instagram {
 
         $client = new Zend_Http_Client();
         $client->setUri($this->_api . $version . $endpoint);
-        $client->setParameterGet(array(
-            'access_token' => $this->getAccessToken()
-        ));
+
+        if(!isset($args['grant_type'])) {
+            $client->setParameterGet(array(
+                'access_token' => $this->getAccessToken()
+            ));
+        }
 
         if($method == 'GET') {
             $client->setParameterGet($args);
