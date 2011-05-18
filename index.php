@@ -19,6 +19,9 @@ if(!isset($_SESSION['InstagramAccessToken']) && isset($_GET['code'])) {
     $_SESSION['InstagramAccessToken'] = $instagram->getAccessToken($_GET['code']);
     $output = 'Authenticated';
 }
+if(isset($_SESSION['InstagramAccessToken'])) {
+    $instagram->setAccessToken($_SESSION['InstagramAccessToken']);
+}
 
 
 if($do == 'login') {
@@ -29,7 +32,9 @@ if($do == 'logout') {
     $_SESSION['InstagramAccessToken'] = null;
     $output = 'Logged out';
 }
-if($do == 'user') {}
+if($do == 'user') {
+    $output = $instagram->getUser();
+}
 if($do == 'user_search') {}
 if($do == 'user_follows') {}
 if($do == 'user_followed_by') {}
@@ -37,8 +42,6 @@ if($do == 'user_requested_by') {}
 if($do == 'user_media_feed') {}
 if($do == 'user_recent_media') {}
 if($do == 'user_relationship') {}
-
-
 
 
 ?><!DOCTYPE HTML>
@@ -75,37 +78,41 @@ if($do == 'user_relationship') {}
                     <li>
                         <a href="?do=logout">Logout</a>
                     </li>
+                    <li>
+                        <strong>User</strong>
+                        <ul>
+                            <li>
+                                <a href="?do=user">User</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_search">User search</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_follows">User follows</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_followed_by">User followed by</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_requested_by">User requested by</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_media_feed">User media feed</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_recent_media">User recent media</a>
+                            </li>
+                            <li>
+                                <a href="?do=user_relationship">User relationship</a>
+                            </li>
+                        </ul>
+                    </li>
                 <?php endif; ?>
-
-                <li>
-                    <a href="?do=user">User</a>
-                </li>
-                <li>
-                    <a href="?do=user_search">User search</a>
-                </li>
-                <li>
-                    <a href="?do=user_follows">User follows</a>
-                </li>
-                <li>
-                    <a href="?do=user_followed_by">User followed by</a>
-                </li>
-                <li>
-                    <a href="?do=user_requested_by">User requested by</a>
-                </li>
-                <li>
-                    <a href="?do=user_media_feed">User media feed</a>
-                </li>
-                <li>
-                    <a href="?do=user_recent_media">User recent media</a>
-                </li>
-                <li>
-                    <a href="?do=user_relationship">User relationship</a>
-                </li>
             </ul>
         </div>
 
         <div id="right" class="grid_9">
-            <?php var_dump($output); ?>
+            <?php var_dump(Zend_Json::decode($output)); ?>
         </div>
     </div>
 

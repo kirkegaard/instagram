@@ -68,7 +68,7 @@ class ZendX_Service_Instagram {
      *
      * @var string $_token The access token
      */
-    private $_token;
+    private $_token = null;
 
     /**
      * The API version
@@ -103,6 +103,9 @@ class ZendX_Service_Instagram {
      */
     public function getAuthorizeUri()
     {
+        if(null !== $this->_token) {
+            throw new Exception('Access token is already set.');
+        }
         $params = array(
             'client_id'     => $this->_client,
             'redirect_uri'  => $this->_redirect,
@@ -119,8 +122,12 @@ class ZendX_Service_Instagram {
      * @param  string $code The code returned from auth
      * @return string
      */
-    public function getAccessToken($code)
+    public function getAccessToken($code = null)
     {
+        if(null !== $this->_token) {
+            return $this->_token;
+        }
+
         $params = array(
             'client_id'     => $this->_client,
             'client_secret' => $this->_secret,
@@ -142,12 +149,16 @@ class ZendX_Service_Instagram {
         return $this->_token;
     }
 
+    public function setAccessToken($token)
+    {
+        $this->_token = $token;
+        return $this;
+    }
 
-
-    public function getUser($id)
+    public function getUser($id = 'self')
     {
         return $this->_sendRequest(
-            '/users/'
+            '/users/' . $id
         );
     }
 
@@ -191,6 +202,9 @@ class ZendX_Service_Instagram {
 
         $client = new Zend_Http_Client();
         $client->setUri($this->_api . $version . $endpoint);
+        $client->setParameterGet(array(
+            'access_token' => $this->getAccessToken()
+        ));
 
         if($method == 'GET') {
             $client->setParameterGet($args);
