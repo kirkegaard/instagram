@@ -155,60 +155,121 @@ class ZendX_Service_Instagram {
         return $this;
     }
 
-    public function getUser($id = 'self')
+
+    public function user($id = 'self')
     {
         return $this->_sendRequest(
             '/users/' . $id
         );
     }
 
-    public function getUserSearch($query)
+    public function userSearch($q)
     {
         return $this->_sendRequest(
             '/users/search/',
-            array('q' => $query)
+            array('q' => $q)
         );
     }
 
-    public function getUserFollows($id = 'self')
+    public function userFollows($id = 'self')
     {
         return $this->_sendRequest(
             '/users/' . $id . '/follows'
         );
     }
 
-    public function getUserFollowedBy($id = 'self')
+    public function userFollowedBy($id = 'self')
     {
         return $this->_sendRequest(
             '/users/' . $id . '/followed-by'
         );
     }
 
-    public function getUserRequestedBy()
+    public function userRequestedBy()
     {
         return $this->_sendRequest(
             '/users/self/requested-by'
         );
     }
 
-    public function getUserMediaFeed()
+    public function userMediaFeed()
     {
         return $this->_sendRequest(
             '/users/self/feed'
         );
     }
 
-    public function getUserRecentMedia($id = 'self')
+    public function userRecentMedia($id = 'self')
     {
         return $this->_sendRequest(
             '/users/' . $id . '/media/recent'
         );
     }
 
-    public function getUserRelationship($id)
+    public function userRelationship($id)
     {
         return $this->_sendRequest(
             '/users/' . $id . '/relationship'
+        );
+    }
+
+    public function followUser($id)
+    {
+        $options = array('action' => 'follow');
+        return $this->_sendRequest(
+            '/users/' . $id . '/relationship',
+            $options,
+            'POST'
+        );
+    }
+
+    public function unfollowUser($id)
+    {
+        $options = array('action' => 'unfollow');
+        return $this->_sendRequest(
+            '/users/' . $id . '/relationship',
+            $options,
+            'POST'
+        );
+    }
+
+    public function blockUser($id)
+    {
+        $options = array('action' => 'block');
+        return $this->_sendRequest(
+            '/users/' . $id . '/relationship',
+            $options,
+            'POST'
+        );
+    }
+
+    public function unblockUser($id)
+    {
+        $options = array('action' => 'unblock');
+        return $this->_sendRequest(
+            '/users/' . $id . '/relationship',
+            $options,
+            'POST'
+        );
+    }
+
+    public function approveUser($id)
+    {
+        $options = array('action' => 'approve');
+        return $this->_sendRequest(
+            '/users/' . $id . '/relationship',
+            $options,
+            'POST'
+        );
+    }
+
+    public function denyUser($id)
+    {
+        $options = array('action' => 'deny');
+        return $this->_sendRequest(
+            '/users/' . $id . '/relationship',
+            $options,
+            'POST'
         );
     }
 
