@@ -273,6 +273,32 @@ class ZendX_Service_Instagram {
         );
     }
 
+    public function mediaItem($id = 'self')
+    {
+        return $this->_sendRequest(
+            '/media/' . $id
+        );
+    }
+
+    public function mediaPopular()
+    {
+        return $this->_sendRequest(
+            '/media/popular'
+        );
+    }
+
+    public function mediaSearch($lat, $lng, $options = array())
+    {
+        $options = array_merge($options, array(
+            'lat' => $lat,
+            'lng' => $lng,
+        ));
+        return $this->_sendRequest(
+            '/media/search',
+            $options
+        );
+    }
+
     /**
      * Send a request to the API
      *
