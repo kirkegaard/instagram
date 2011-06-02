@@ -77,6 +77,8 @@ class ZendX_Service_Instagram {
      */
     private $_version;
 
+    private $_scope = array();
+
     /**
      * Constructor
      *
@@ -86,12 +88,13 @@ class ZendX_Service_Instagram {
      * @param string $api      The API url (optional)
      * @param string $version  The API version (optional)
      */
-    public function __construct($client, $secret, $redirect, $api = 'https://api.instagram.com', $version = 'v1')
+    public function __construct($client, $secret, $redirect, $scope = array(), $api = 'https://api.instagram.com', $version = 'v1')
     {
         $this->_oauth    = null;
         $this->_client   = $client;
         $this->_secret   = $secret;
         $this->_redirect = $redirect;
+        $this->_scope    = $scope;
         $this->_api      = $api;
         $this->_version  = $version;
     }
@@ -109,7 +112,8 @@ class ZendX_Service_Instagram {
         $params = array(
             'client_id'     => $this->_client,
             'redirect_uri'  => $this->_redirect,
-            'response_type' => 'code'
+            'response_type' => 'code',
+            'scope'         => implode(' ', $this->_scope),
         );
         $args = http_build_query($params);
 
@@ -384,14 +388,14 @@ class ZendX_Service_Instagram {
     public function location($id)
     {
         return $this->_sendRequest(
-            '/location/' . $id
+            '/locations/' . $id
         );
     }
 
     public function locationRecentMedia($id, $options = array())
     {
         return $this->_sendRequest(
-            '/location/' . $id . '/media/recent',
+            '/locations/' . $id . '/media/recent',
             $options
         );
     }
@@ -403,7 +407,7 @@ class ZendX_Service_Instagram {
             'lng' => $lng,
         ));
         return $this->_sendRequest(
-            '/location/search',
+            '/locations/search',
             $options
         );
     }

@@ -7,7 +7,8 @@ session_start();
 $instagram = new ZendX_Service_Instagram(
     '5d04b189d8a34be38f755a0f27ff09a3',
     '471ecfd3aaae4d19b6afb11d9d38f133',
-    'http://instagram.local/'
+    'http://instagram.local/',
+    array('likes', 'comments', 'relationships')
 );
 
 
@@ -32,44 +33,102 @@ if($do == 'logout') {
     $_SESSION['InstagramAccessToken'] = null;
     $output = array('message' => 'Logged out');
 }
-if($do == 'user') {
-    $output = $instagram->user();
-}
-if($do == 'user_search') {
-    $output = $instagram->userSearch('christiank');
-}
-if($do == 'user_follows') {
-    $output = $instagram->userFollows();
-}
-if($do == 'user_followed_by') {
-    $output = $instagram->userFollowedBy();
-}
-if($do == 'user_requested_by') {
-    $output = $instagram->userRequestedBy();
-}
-if($do == 'user_media_feed') {
-    $output = $instagram->userMediaFeed();
-}
-if($do == 'user_recent_media') {
-    $output = $instagram->userRecentMedia();
-}
-if($do == 'user_liked_media') {
-    $output = $instagram->userLikedMedia();
-}
-if($do == 'user_relationship') {
-    $output = $instagram->userRelationship(2743472);
-}
-if($do == 'media_item') {
-    $output = $instagram->mediaItem(85090024);
-}
-if($do == 'media_popular') {
-    $output = $instagram->mediaPopular();
-}
-if($do == 'media_search') {
-    $output = $instagram->mediaSearch(55.676356, 12.569153);
-}
 
+switch ($do) {
+    // user
+    case 'user':
+        $output = $instagram->user();
+        break;
+    case 'user_search':
+        $output = $instagram->userSearch('christiank');
+        break;
+    case 'user_follows':
+        $output = $instagram->userFollows();
+        break;
+    case 'user_followed_by':
+        $output = $instagram->userFollowedBy();
+        break;
+    case 'user_requested_by':
+        $output = $instagram->userRequestedBy();
+        break;
+    case 'user_media_feed':
+        $output = $instagram->userMediaFeed();
+        break;
+    case 'user_recent_media':
+        $output = $instagram->userRecentMedia();
+        break;
+    case 'user_liked_media':
+        $output = $instagram->userLikedMedia();
+        break;
+    case 'user_relationship':
+        $output = $instagram->userRelationship(2743472);
+        break;
 
+    // media
+    case 'media_item':
+        $output = $instagram->mediaItem(85090024);
+        break;
+    case 'media_popular':
+        $output = $instagram->mediaPopular();
+        break;
+    case 'media_search':
+        $output = $instagram->mediaSearch(55.676356, 12.569153);
+        break;
+
+    // comments
+    case 'media_comments':
+        $output = $instagram->mediaComments(85090024);
+        break;
+    case 'create_media_comment':
+        $output = $instagram->createMediaComment(85090024, 'Hello from php instagram wrapper example page');
+        break;
+    // we cant really test this since the id changes all the time
+    // case 'delete_media_comment':
+    //     break;
+
+    // likes
+    case 'media_likes':
+        $output = $instagram->mediaLikes(85090024);
+        break;
+    case 'like_media':
+        $output = $instagram->likeMedia(85090024);
+        break;
+    case 'unlike_media':
+        $output = $instagram->unlikeMedia(85090024);
+        break;
+
+    // tags
+    case 'tag':
+        $output = $instagram->tag('cats');
+        break;
+    case 'tag_recent_media':
+        $output = $instagram->tagRecentMedia('cats');
+        break;
+    case 'tag_search':
+        $output = $instagram->tagSearch('cats');
+        break;
+
+    // location
+    case 'location':
+        $output = $instagram->location(120774);
+        break;
+    case 'location_recent_media':
+        $output = $instagram->locationRecentMedia(120774);
+        break;
+    case 'location_search':
+        $output = $instagram->locationSearch(55.676356, 12.569153);
+        break;
+
+    // geography
+    // This only works for oauth clients own geographics
+    // case 'geography_recent_media':
+    //     $output = $instagram->geographyRecentMedia(1);
+    //     break;
+
+    default:
+        $output = array('Nothing to do');
+        break;
+}
 
 ?><!DOCTYPE HTML>
 <html>
@@ -140,15 +199,68 @@ if($do == 'media_search') {
                     <li>
                         <strong>Media</strong>
                         <ul>
-                        	<li>
-                        		<a href="?do=media_item">Media item</a>
-                        	</li>
-                        	<li>
-                        		<a href="?do=media_popular">Media popular</a>
-                        	</li>
-                        	<li>
-                        		<a href="?do=media_search">Media search</a>
-                        	</li>
+                            <li>
+                                <a href="?do=media_item">Media item</a>
+                            </li>
+                            <li>
+                                <a href="?do=media_popular">Media popular</a>
+                            </li>
+                            <li>
+                                <a href="?do=media_search">Media search</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Comments</strong>
+                        <ul>
+                            <li>
+                                <a href="?do=media_comments">Media comments</a>
+                            </li>
+                            <li>
+                                <a href="?do=create_media_comment">Create media comment</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Likes</strong>
+                        <ul>
+                            <li>
+                                <a href="?do=media_likes">Media likes</a>
+                            </li>
+                            <li>
+                                <a href="?do=like_media">Like media</a>
+                            </li>
+                            <li>
+                                <a href="?do=unlike_media">Unlike media</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Tags</strong>
+                        <ul>
+                            <li>
+                                <a href="?do=tag">Tag</a>
+                            </li>
+                            <li>
+                                <a href="?do=tag_recent_media">Tag recent media</a>
+                            </li>
+                            <li>
+                                <a href="?do=tag_search">Tag search</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Location</strong>
+                        <ul>
+                            <li>
+                                <a href="?do=location">Location</a>
+                            </li>
+                            <li>
+                                <a href="?do=location_recent_media">Location recent media</a>
+                            </li>
+                            <li>
+                                <a href="?do=location_search">Location search</a>
+                            </li>
                         </ul>
                     </li>
                 <?php endif; ?>
