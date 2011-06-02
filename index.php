@@ -33,28 +33,40 @@ if($do == 'logout') {
     $output = array('message' => 'Logged out');
 }
 if($do == 'user') {
-    $output = $instagram->getUser();
+    $output = $instagram->user();
 }
 if($do == 'user_search') {
-    $output = $instagram->getUserSearch('eyen');
+    $output = $instagram->userSearch('christiank');
 }
 if($do == 'user_follows') {
-    $output = $instagram->getUserFollows();
+    $output = $instagram->userFollows();
 }
 if($do == 'user_followed_by') {
-    $output = $instagram->getUserFollowedBy();
+    $output = $instagram->userFollowedBy();
 }
 if($do == 'user_requested_by') {
-    $output = $instagram->getUserRequestedBy();
+    $output = $instagram->userRequestedBy();
 }
 if($do == 'user_media_feed') {
-    $output = $instagram->getUserMediaFeed();
+    $output = $instagram->userMediaFeed();
 }
 if($do == 'user_recent_media') {
-    $output = $instagram->getUserRecentMedia();
+    $output = $instagram->userRecentMedia();
+}
+if($do == 'user_liked_media') {
+    $output = $instagram->userLikedMedia();
 }
 if($do == 'user_relationship') {
-    $output = $instagram->getUserRelationship(2743472);
+    $output = $instagram->userRelationship(2743472);
+}
+if($do == 'media_item') {
+    $output = $instagram->mediaItem(85090024);
+}
+if($do == 'media_popular') {
+    $output = $instagram->mediaPopular();
+}
+if($do == 'media_search') {
+    $output = $instagram->mediaSearch(55.676356, 12.569153);
 }
 
 
@@ -118,8 +130,25 @@ if($do == 'user_relationship') {
                                 <a href="?do=user_recent_media">User recent media</a>
                             </li>
                             <li>
+                                <a href="?do=user_liked_media">User Liked Media</a>
+                            </li>
+                            <li>
                                 <a href="?do=user_relationship">User relationship</a>
                             </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Media</strong>
+                        <ul>
+                        	<li>
+                        		<a href="?do=media_item">Media item</a>
+                        	</li>
+                        	<li>
+                        		<a href="?do=media_popular">Media popular</a>
+                        	</li>
+                        	<li>
+                        		<a href="?do=media_search">Media search</a>
+                        	</li>
                         </ul>
                     </li>
                 <?php endif; ?>

@@ -206,6 +206,14 @@ class ZendX_Service_Instagram {
         );
     }
 
+    public function userLikedMedia($options = array())
+    {
+        return $this->_sendRequest(
+            '/users/self/media/liked',
+            $options
+        );
+    }
+
     public function userRelationship($id)
     {
         return $this->_sendRequest(
@@ -295,6 +303,115 @@ class ZendX_Service_Instagram {
         ));
         return $this->_sendRequest(
             '/media/search',
+            $options
+        );
+    }
+
+    public function mediaComments($id)
+    {
+        return $this->_sendRequest(
+            '/media/' . $id . '/comments'
+        );
+    }
+
+    public function createMediaComment($id, $text)
+    {
+        return $this->_sendRequest(
+            '/media/' . $id . '/comments',
+            array('text' => $text),
+            'POST'
+        );
+    }
+
+    public function deleteMediaComment($media_id, $comment_id)
+    {
+        return $this->_sendRequest(
+            '/media/' . $media_id . '/comments/' . $comment_id,
+            array(),
+            'DELETE'
+        );
+    }
+
+    public function mediaLikes($id)
+    {
+        return $this->_sendRequest(
+            '/media/' . $id . '/likes'
+        );
+    }
+
+    public function likeMedia($id)
+    {
+        return $this->_sendRequest(
+            '/media/' . $id . '/likes',
+            array(),
+            'POST'
+        );
+    }
+
+    public function unlikeMedia($id)
+    {
+        return $this->_sendRequest(
+            '/media/' . $id . '/likes',
+            array(),
+            'DELETE'
+        );
+    }
+
+    public function tag($tag)
+    {
+        return $this->_sendRequest(
+            '/tags/' . $tag
+        );
+    }
+
+    public function tagRecentMedia($tag, $options = array())
+    {
+        return $this->_sendRequest(
+            '/tags/' . $tag . '/media/recent',
+            $options
+        );
+    }
+
+    public function tagSearch($q, $options = array())
+    {
+        $options = array_merge($options, array('q' => $q));
+        return $this->_sendRequest(
+            '/tags/search',
+            $options
+        );
+    }
+
+    public function location($id)
+    {
+        return $this->_sendRequest(
+            '/location/' . $id
+        );
+    }
+
+    public function locationRecentMedia($id, $options = array())
+    {
+        return $this->_sendRequest(
+            '/location/' . $id . '/media/recent',
+            $options
+        );
+    }
+
+    public function locationSearch($lat, $lng, $options = array())
+    {
+        $options = array_merge($options, array(
+            'lat' => $lat,
+            'lng' => $lng,
+        ));
+        return $this->_sendRequest(
+            '/location/search',
+            $options
+        );
+    }
+
+    public function geographyRecentMedia($id, $options = array())
+    {
+        return $this->_sendRequest(
+            '/geographies/' . $id . '/media/recent',
             $options
         );
     }
