@@ -1,10 +1,18 @@
-# Instagram Zend Framework Component
+# Instagram PHP Wrapper
 
-A quick and dirty component for instagram that fits right into Zend Framework.
-Check `index.php` for usage example
+Instagram provides a great Ruby wrapper. So i ported the wrapper to php.
+I try to use the same method calls over all. I have though renamed the
+calls to a more php'ish naming convention. Where the ruby wrapper uses
+`user_recent_media` I do `userRecentMedia`.
+
+The library extends the `ZendX_Service` namespace to fit right in to
+Zend Framework. It uses a few component off Zend Framework.
 
 ## Depends
 
  * `Zend_Json`
  * `Zend_Http_Client`
 
+## Usage
+
+See `index.php`
