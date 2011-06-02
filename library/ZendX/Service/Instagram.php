@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Services_Instagram
+ * ZendX_Service_Instagram
  *
  * Implementation of the Instagram API
  *
@@ -13,12 +13,12 @@
  * a copy of the New BSD License and are unable to obtain it through the web,
  * please send a note to license@php.net so we can mail you a copy immediately.
  *
- * @category  Services
- * @package   Services_Instagram
+ * @category  ZendX
+ * @package   ZendX_Service
  * @author    Christian Kirkegaard <hello@christiank.org>
  * @copyright 2011 Christian Kirkegaard <hello@christiank.org>
  * @license   http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @link      http://github.com/ranza/Services_Instagram
+ * @link      https://github.com/ranza/instagram
  */
 
 require_once 'Zend/Http/Client.php';
