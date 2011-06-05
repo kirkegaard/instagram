@@ -77,7 +77,21 @@ class ZendX_Service_Instagram {
      */
     private $_version;
 
-    private $_scope = array();
+    /**
+     * The scope of permissions you want
+     * Supports: likes, comments, relationships
+     *
+     * @var string $_scope The scope of permissions
+     */
+    private $_scope = array('basic');
+
+    /**
+     * The format you wish to get returned.
+     * Right now only json and array is supported
+     *
+     * @var string $_format Returned format
+     */
+    private $_format = 'json';
 
     /**
      * Constructor
@@ -85,16 +99,19 @@ class ZendX_Service_Instagram {
      * @param string $client   The OAuth client id
      * @param string $secret   The OAuth client secret
      * @param string $redirect The redirect url
+     * @param string $format   The format you want returned
+     * @param array  $scope    The permission scope
      * @param string $api      The API url (optional)
      * @param string $version  The API version (optional)
      */
-    public function __construct($client, $secret, $redirect, $scope = array(), $api = 'https://api.instagram.com', $version = 'v1')
+    public function __construct($client, $secret, $redirect, $format = 'json', $scope = array('basic'), $api = 'https://api.instagram.com', $version = 'v1')
     {
         $this->_oauth    = null;
         $this->_client   = $client;
         $this->_secret   = $secret;
         $this->_redirect = $redirect;
         $this->_scope    = $scope;
+        $this->_format   = $format;
         $this->_api      = $api;
         $this->_version  = $version;
     }
@@ -140,15 +157,19 @@ class ZendX_Service_Instagram {
             'code'          => $code
         );
 
-        $response = Zend_Json::decode($this->_sendRequest(
+        $format = $this->_format;
+        $this->_format = 'array';
+
+        $response = $this->_sendRequest(
             '/oauth/access_token',
             $params,
             'POST',
             false
-        ));
+        );
 
-        $this->_oauth = $response['user'];
-        $this->_token = $response['access_token'];
+        $this->_format = $format;
+        $this->_oauth  = $response['user'];
+        $this->_token  = $response['access_token'];
 
         return $this->_token;
     }
@@ -453,7 +474,17 @@ class ZendX_Service_Instagram {
             $client->setParameterPost($args);
         }
 
-        return $client->request($method)->getBody();
+        $body = $client->request($method)->getBody();
+
+        switch(strtolower($this->_format)) {
+            case 'array':
+                return Zend_Json::decode($body);
+                break;
+            default:
+            case 'json':
+                return $body;
+                break;
+        }
     }
 
 
